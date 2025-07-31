@@ -155,12 +155,12 @@ public class CBMenuPlugin extends JavaPlugin implements Listener, CommandExecuto
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
-        Inventory inv = event.getInventory();
-        if (inv.equals(mainMenu)) {
+        String title = event.getView().getTitle();
+        if (title.equals(titles.get(mainMenu))) {
             handleMainMenu(event, player);
-        } else if (inv.equals(cb01Menu)) {
+        } else if (title.equals(titles.get(cb01Menu))) {
             handleCB01Menu(event, player);
-        } else if (inv.equals(cb02Menu)) {
+        } else if (title.equals(titles.get(cb02Menu))) {
             handleCB02Menu(event, player);
         }
     }
