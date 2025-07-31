@@ -1,0 +1,7 @@
+name: CBMenu
+main: com.example.cbmenu.CBMenuPlugin
+version: 1.0.0
+api-version: "1.21"
+commands:
+  cb:
+    description: "Öffnet das CityBuild-Menü"
