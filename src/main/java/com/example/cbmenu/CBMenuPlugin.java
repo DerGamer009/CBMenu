@@ -104,19 +104,41 @@ public class CBMenuPlugin extends JavaPlugin implements Listener, CommandExecuto
         return true;
     }
 
-    private void openWithAnimation(Player player, Inventory inv) {
+    private void openWithAnimation(Player player, Inventory source) {
+        Inventory inv = Bukkit.createInventory(null, source.getSize(), source.getTitle());
+        for (int i = 0; i < source.getSize(); i++) {
+            ItemStack item = source.getItem(i);
+            if (item != null) {
+                inv.setItem(i, item.clone());
+            }
+        }
+
         player.openInventory(inv);
+
+        List<Integer> frameSlots = new ArrayList<>();
+        for (int i = 0; i < inv.getSize(); i++) {
+            ItemStack item = inv.getItem(i);
+            if (item != null && item.getType() == Material.GREEN_STAINED_GLASS_PANE) {
+                frameSlots.add(i);
+            }
+        }
+
         new BukkitRunnable() {
             int ticks = 0;
+
             @Override
             public void run() {
                 if (ticks >= 10) {
                     cancel();
                     return;
                 }
-                int slot = random.nextInt(inv.getSize());
-                ItemStack glass = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
-                inv.setItem(slot, glass);
+
+                if (!frameSlots.isEmpty()) {
+                    int slot = frameSlots.get(random.nextInt(frameSlots.size()));
+                    ItemStack glass = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
+                    inv.setItem(slot, glass);
+                }
+
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
                 ticks++;
             }
