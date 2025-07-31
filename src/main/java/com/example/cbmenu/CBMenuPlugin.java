@@ -22,6 +22,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Random;
 
 public class CBMenuPlugin extends JavaPlugin implements Listener, CommandExecutor {
@@ -29,6 +31,7 @@ public class CBMenuPlugin extends JavaPlugin implements Listener, CommandExecuto
     private Inventory mainMenu;
     private Inventory cb01Menu;
     private Inventory cb02Menu;
+    private final Map<Inventory, String> titles = new HashMap<>();
     private final Random random = new Random();
 
     @Override
@@ -43,8 +46,11 @@ public class CBMenuPlugin extends JavaPlugin implements Listener, CommandExecuto
 
     private void createMenus() {
         mainMenu = Bukkit.createInventory(null, 27, ChatColor.GREEN + "CityBuild Menü");
+        titles.put(mainMenu, ChatColor.GREEN + "CityBuild Menü");
         cb01Menu = Bukkit.createInventory(null, 27, ChatColor.GREEN + "CB01");
+        titles.put(cb01Menu, ChatColor.GREEN + "CB01");
         cb02Menu = Bukkit.createInventory(null, 27, ChatColor.GREEN + "CB02");
+        titles.put(cb02Menu, ChatColor.GREEN + "CB02");
 
         fillFrame(mainMenu);
         fillFrame(cb01Menu);
@@ -105,7 +111,8 @@ public class CBMenuPlugin extends JavaPlugin implements Listener, CommandExecuto
     }
 
     private void openWithAnimation(Player player, Inventory source) {
-        Inventory inv = Bukkit.createInventory(null, source.getSize(), source.getTitle());
+        String title = titles.getOrDefault(source, "");
+        Inventory inv = Bukkit.createInventory(null, source.getSize(), title);
         for (int i = 0; i < source.getSize(); i++) {
             ItemStack item = source.getItem(i);
             if (item != null) {
